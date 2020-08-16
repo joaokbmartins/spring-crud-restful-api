@@ -1,10 +1,11 @@
 package br.com.crudrestapi.endpoints;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,35 +27,36 @@ public class UserEndpoint {
 	private UserRepository userRepository;
 
 	@GetMapping
-	public List<User> index() {
-		return this.userRepository.findAll();
+	public ResponseEntity<?> index(Pageable pageable) {
+		return new ResponseEntity<>(this.userRepository.findAll(pageable), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public User userById(@PathVariable(value = "id") long id) {
+	public ResponseEntity<?> userById(@PathVariable(value = "id") long id) {
 		User user = getUser(id);
-		System.out.println(user==null);
+		System.out.println(user == null);
 		userExists(user, id);
-		return user;
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@PostMapping
-	public User saveUser(@Valid @RequestBody User user) { 
-		return this.userRepository.save(user);
+	public ResponseEntity<?> saveUser(@Valid @RequestBody User user) {
+		return new ResponseEntity<>(this.userRepository.save(user), HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public User updateUser(@RequestBody User user) {
+	public ResponseEntity<?> updateUser(@RequestBody User user) {
 		User userValidation = this.getUser(user.getId());
 		userExists(userValidation, user.getId());
-		return this.userRepository.save(user);
+		return new ResponseEntity<>(this.userRepository.save(user), HttpStatus.OK);
 	}
 
 	@DeleteMapping
-	public void deleteUser(@RequestBody User user) {
+	public ResponseEntity<?> deleteUser(@RequestBody User user) {
 		User userValidation = this.getUser(user.getId());
 		userExists(userValidation, user.getId());
 		this.userRepository.delete(user);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	private User getUser(long id) {

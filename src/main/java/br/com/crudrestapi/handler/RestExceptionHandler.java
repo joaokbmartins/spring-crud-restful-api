@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,6 +84,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		errorDetails.setDetail(rnfException.getMessage());
 		errorDetails.setDeveloperMessage(rnfException.getClass().getName());
 		return new ResponseEntity<>(errorDetails, headers, status);
+	}
+	
+	@ExceptionHandler(PropertyReferenceException.class)
+	protected ResponseEntity<?> handlePropertyReferenceException(PropertyReferenceException prException) {
+		ErrorDetails errorDetails = new ErrorDetails();
+		final String TITLE = "Internal Server Error";
+		errorDetails.setTitle(TITLE);
+		errorDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		errorDetails.setDetail(prException.getMessage());
+		errorDetails.setDeveloperMessage(prException.getClass().getName());
+		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
