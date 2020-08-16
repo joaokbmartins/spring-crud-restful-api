@@ -1,39 +1,36 @@
 package br.com.crudrestapi.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.sun.istack.NotNull;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	@Transient
+	private final String REQUIRED_FIELD = "Required field";
 
 	@NotNull
+	@Email(message = "Invalid email address")
+	@NotEmpty(message = REQUIRED_FIELD)
 	@Column(unique = true)
 	private String email;
 
 	@NotNull
+	@NotEmpty(message = REQUIRED_FIELD)
 	private String password;
 
-	public int getId() {
-		return id;
+	public User() {
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	@Override
+	public String toString() {
+		return super.toString() + "\nUser [email=" + email + ", password=" + password + "]";
 	}
 
 	public String getEmail() {
@@ -51,5 +48,4 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 }
