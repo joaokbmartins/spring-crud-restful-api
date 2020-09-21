@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import br.com.crudrestapi.entity.User;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
-	public User findById(long id);
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+    public User findById(long id);
+
+    public User findByEmail(String email);
 }

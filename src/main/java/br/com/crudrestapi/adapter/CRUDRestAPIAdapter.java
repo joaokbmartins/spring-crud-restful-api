@@ -11,11 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CRUDRestAPIAdapter implements WebMvcConfigurer {
 
-	@Override
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolver) {
-		PageableHandlerMethodArgumentResolver phmar = new PageableHandlerMethodArgumentResolver();
-		phmar.setFallbackPageable(PageRequest.of(0, 5));
-		argumentResolver.add(phmar);
-	}
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolver) {
+	PageableHandlerMethodArgumentResolver phmar = new PageableHandlerMethodArgumentResolver();
+	phmar.setFallbackPageable(PageRequest.of(0, 5));
+	argumentResolver.add(phmar);
+    }
 
 }
